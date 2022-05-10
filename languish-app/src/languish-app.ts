@@ -66,6 +66,12 @@ export class LanguishApp extends LitElement {
         <h1>${this.title}</h1>
         <p>The worst way to learn a language.</p>
 
+        <select @change=${this._handleLangChange}>
+          <option value="fr">French</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+        </select>
+
         <div class="translation-row">
           <textarea cols="30" rows="10" @input=${this._handleInput}></textarea>
           ${this._translation == null
@@ -113,6 +119,11 @@ export class LanguishApp extends LitElement {
     this._text = text;
   }
 
+  private _handleLangChange(e: Event) {
+    const text = (e.target as HTMLInputElement).value ?? '';
+    this._targetLang = text;
+  }
+
   private _computeCanTranslate(): boolean {
     return !!this._text.length;
   }
@@ -134,7 +145,7 @@ export class LanguishApp extends LitElement {
         body: JSON.stringify({
           text: this._text,
           sourceLang: 'en',
-          targetLang: 'fr',
+          targetLang: this._targetLang,
         }),
       });
       const json = await res.json();
