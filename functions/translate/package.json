@@ -1,0 +1,23 @@
+{
+  "name": "translate",
+  "description": "Serverless function to translate text",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "dependencies": {
+    "@aws-sdk/client-translate": "^3.87.0",
+    "aws-sdk": "^2.1131.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KaiPrince/Languish.git"
+  },
+  "author": "Kai Prince",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KaiPrince/Languish/issues"
+  },
+  "homepage": "https://github.com/KaiPrince/Languish#readme"
+}
