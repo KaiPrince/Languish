@@ -1,6 +1,6 @@
 org: kaiprince
 app: languish
-service: languish
+service: translate
 frameworkVersion: '3'
 
 provider:
