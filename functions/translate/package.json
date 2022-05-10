@@ -19,8 +19,5 @@
   "bugs": {
     "url": "https://github.com/KaiPrince/Languish/issues"
   },
-  "homepage": "https://github.com/KaiPrince/Languish#readme",
-  "devDependencies": {
-    "serverless-api-gateway-throttling": "^1.2.2"
-  }
+  "homepage": "https://github.com/KaiPrince/Languish#readme"
 }
