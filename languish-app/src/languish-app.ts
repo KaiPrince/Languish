@@ -1,18 +1,12 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
 const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
 
 @customElement('languish-app')
 export class LanguishApp extends LitElement {
   @property()
-  title = 'Languish';
-
-  @property()
-  translation: String | null = null;
-
-  @property()
-  targetLang: String = 'fr';
+  title = 'Langu-ish';
 
   static styles = css`
     :host {
@@ -55,6 +49,14 @@ export class LanguishApp extends LitElement {
     .app-footer a {
       margin-left: 5px;
     }
+
+    .translation-row {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      border: 2px solid white;
+      border-radius: 5px;
+    }
   `;
 
   render() {
@@ -64,10 +66,27 @@ export class LanguishApp extends LitElement {
         <h1>${this.title}</h1>
         <p>The worst way to learn a language.</p>
 
-        <textarea cols="30" rows="10" @change=${this._translate}></textarea>
-        ${this.translation == null
-          ? html`<p>Translated text will appear here.</p>`
-          : html`<p lang=${this.targetLang}>${this.translation}</p>`}
+        <div class="translation-row">
+          <textarea cols="30" rows="10" @input=${this._handleInput}></textarea>
+          ${this._translation == null
+            ? html`<p>
+                ${this._isLoading
+                  ? 'Translation is loading...'
+                  : 'Translated text will appear here.'}
+              </p>`
+            : html`<p lang=${this._targetLang}>${this._translation}</p>`}
+        </div>
+
+        <button
+          @click=${this._translate}
+          ?disabled=${!this._computeCanTranslate()}
+        >
+          Translate
+        </button>
+
+        <button @click=${this._speak} ?disabled=${!this._computeCanSpeak()}>
+          Speak
+        </button>
       </main>
 
       <p class="app-footer">
@@ -77,19 +96,79 @@ export class LanguishApp extends LitElement {
     `;
   }
 
-  private async _translate(e: Event): Promise<void> {
-    const text = (e.target as HTMLInputElement).value ?? '';
+  @state()
+  private _translation: string | null = null;
 
-    const res = await fetch('your translation api here', {
-      method: 'post',
-      body: JSON.stringify({
-        text,
-        sourceLang: 'en',
-        targetLang: 'fr',
-      }),
-    });
-    const json = await res.json();
-    this.translation = json.result;
+  @state()
+  private _targetLang: string = 'fr';
+
+  @state()
+  private _text: string = '';
+
+  @state()
+  private _isLoading: boolean = false;
+
+  private _handleInput(e: Event) {
+    const text = (e.target as HTMLInputElement).value ?? '';
+    this._text = text;
+  }
+
+  private _computeCanTranslate(): boolean {
+    return !!this._text.length;
+  }
+
+  private _computeCanSpeak(): boolean {
+    return !!this._translation?.length;
+  }
+
+  private async _translate(): Promise<void> {
+    if (!this._computeCanTranslate()) {
+      return;
+    }
+
+    this._isLoading = true;
+
+    try {
+      const res = await fetch('your translation api here', {
+        method: 'post',
+        body: JSON.stringify({
+          text: this._text,
+          sourceLang: 'en',
+          targetLang: 'fr',
+        }),
+      });
+      const json = await res.json();
+      this._translation = json.result;
+    } finally {
+      this._isLoading = false;
+    }
+  }
+
+  private async _speak() {
+    if (!this._computeCanSpeak() || !this._translation) {
+      return;
+    }
+
+    const text = this._translation;
+    if (
+      'speechSynthesis' in window &&
+      window.speechSynthesis.getVoices().length
+    ) {
+      // Speech Synthesis supported
+
+      const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+      for await (const word of text.split(' ')) {
+        const msg = new SpeechSynthesisUtterance(word);
+        msg.lang = this._targetLang;
+        window.speechSynthesis.speak(msg);
+
+        await sleep(1000);
+      }
+    } else {
+      // Speech Synthesis not supported
+      this._translation = "Sorry, your browser doesn't support text to speech!";
+    }
   }
 }
 
