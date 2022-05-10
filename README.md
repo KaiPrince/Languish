@@ -1,6 +1,6 @@
 # Languish
 
- The worst way to learn a language.
+The worst way to learn a language.
 
 ## Todo
 

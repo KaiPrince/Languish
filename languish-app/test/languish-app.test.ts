@@ -1,8 +1,7 @@
 import { html } from 'lit';
 import { fixture, expect } from '@open-wc/testing';
 
-import { LanguishApp } from '../src/LanguishApp.js';
-import '../src/languish-app.js';
+import { LanguishApp } from '../src/languish-app.js';
 
 describe('LanguishApp', () => {
   let element: LanguishApp;

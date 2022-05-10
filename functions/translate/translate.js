@@ -1,17 +1,13 @@
 const aws = require("aws-sdk");
 
-// The maximum number of characters you can submit in a single Translate request.
-// This truncates the input, so only the first MAX_LENGTH characters will be translated.
-const MAX_LENGTH = 5000;
-
-async function translate(text) {
+async function translate(text, sourceLang, targetLang) {
   const client = new aws.Translate();
 
-  const response = await client
+  const response = client
     .translateText({
-      SourceLanguageCode: "en",
-      TargetLanguageCode: "fr",
-      Text: text.substring(0, MAX_LENGTH),
+      SourceLanguageCode: sourceLang,
+      TargetLanguageCode: targetLang,
+      Text: text,
     })
     .promise();
 
@@ -20,4 +16,28 @@ async function translate(text) {
   return translatedText;
 }
 
-module.exports = translate;
+async function translateWordForWord(text, sourceLang, targetLang) {
+  const client = new aws.Translate();
+
+  const responses = await Promise.all(
+    String(text)
+      .split(" ")
+      .map((word) =>
+        client
+          .translateText({
+            SourceLanguageCode: sourceLang,
+            TargetLanguageCode: targetLang,
+            Text: word,
+          })
+          .promise()
+      )
+  );
+
+  const translatedText = responses
+    .map((response) => response.TranslatedText)
+    .join(" ");
+
+  return translatedText;
+}
+
+module.exports = { translate, translateWordForWord };

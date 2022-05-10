@@ -25,3 +25,7 @@ functions:
       - httpApi:
           path: /
           method: post
+    url:
+      cors:
+        allowedOrigins:
+          - http://localhost:8000
