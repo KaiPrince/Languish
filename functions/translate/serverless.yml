@@ -30,3 +30,4 @@ functions:
         allowedOrigins:
           - http://localhost:8000
           - https://languish.kaiprince.xyz
+          - https://languish-349816.web.app
