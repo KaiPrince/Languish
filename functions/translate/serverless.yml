@@ -16,8 +16,8 @@ provider:
             - "*"
 
 functions:
-  translateWordForWord:
-    handler: handler.translateWordForWord
+  hello:
+    handler: handler.hello
     events:
       - httpApi:
           path: /
