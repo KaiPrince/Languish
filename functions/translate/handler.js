@@ -5,7 +5,7 @@ const { translateWordForWord } = require("./translate");
 // This truncates the input, so only the first MAX_LENGTH characters will be translated.
 const MAX_LENGTH = 5000;
 
-module.exports.hello = async (event) => {
+module.exports.translateWordForWord = async (event) => {
   const json = JSON.parse(event?.body ?? "{}");
   const text = json?.text ?? "hello";
   const sourceLang = json?.sourceLang ?? "en";
