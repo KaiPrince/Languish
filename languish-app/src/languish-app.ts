@@ -1,7 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import 'dotenv/config';
 
 const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
+
+const { TRANSLATION_URL } = process.env;
 
 @customElement('languish-app')
 export class LanguishApp extends LitElement {
@@ -137,10 +140,14 @@ export class LanguishApp extends LitElement {
       return;
     }
 
+    if (!TRANSLATION_URL) {
+      return;
+    }
+
     this._isLoading = true;
 
     try {
-      const res = await fetch('your translation api here', {
+      const res = await fetch(TRANSLATION_URL, {
         method: 'post',
         body: JSON.stringify({
           text: this._text,
