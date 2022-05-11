@@ -67,7 +67,7 @@ export class LanguishApp extends LitElement {
       <main>
         <div class="logo"><img alt="open-wc logo" src=${logo} /></div>
         <h1>${this.title}</h1>
-        <p>The worst way to learn a language.</p>
+        <p>The world's worst way to learn a language.</p>
 
         <select @change=${this._handleLangChange}>
           <option value="fr">French</option>
