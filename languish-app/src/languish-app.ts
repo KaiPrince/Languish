@@ -73,6 +73,7 @@ export class LanguishApp extends LitElement {
           <option value="fr">French</option>
           <option value="es">Spanish</option>
           <option value="de">German</option>
+          <option value="sr">Serbian</option>
         </select>
 
         <div class="translation-row">
