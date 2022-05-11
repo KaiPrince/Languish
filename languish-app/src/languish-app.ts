@@ -1,10 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import 'dotenv/config';
 
 const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
 
-const { TRANSLATION_URL } = process.env;
+const TRANSLATION_URL =
+  'https://2t66cqbb74vk7oxb44h3zs4d4u0jhzos.lambda-url.us-east-1.on.aws';
 
 @customElement('languish-app')
 export class LanguishApp extends LitElement {
