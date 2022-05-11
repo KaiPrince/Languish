@@ -6,7 +6,10 @@ on:
       - master
     paths:
       - "functions/**"
-      - "serverless.yml"
+
+defaults:
+  run:
+    working-directory: "functions/translate"
 
 jobs:
   deploy:
