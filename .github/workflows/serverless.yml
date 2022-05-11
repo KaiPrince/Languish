@@ -3,7 +3,7 @@ name: Deploy serverless functions
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - "functions/**"
 
