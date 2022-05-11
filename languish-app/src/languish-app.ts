@@ -175,15 +175,10 @@ export class LanguishApp extends LitElement {
     ) {
       // Speech Synthesis supported
 
-      const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-
-      for await (const word of text.split(' ')) {
-        const msg = new SpeechSynthesisUtterance(word);
-        msg.lang = this._targetLang;
-        window.speechSynthesis.speak(msg);
-
-        await sleep(1000);
-      }
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = this._targetLang;
+      msg.rate = 0.5;
+      window.speechSynthesis.speak(msg);
     } else {
       // Speech Synthesis not supported
       this._translation = "Sorry, your browser doesn't support text to speech!";
