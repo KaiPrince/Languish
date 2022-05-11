@@ -25,6 +25,7 @@ jobs:
       - name: serverless deploy
         uses: serverless/github-action@v3
         with:
-          args: deploy
+          args: -c "cd ./functions/translate && serverless deploy"
+          entrypoint: /bin/sh
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
