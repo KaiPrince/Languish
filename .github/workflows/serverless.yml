@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - "functions/**"
+      - "serverless.yml"
 
 jobs:
   deploy:
