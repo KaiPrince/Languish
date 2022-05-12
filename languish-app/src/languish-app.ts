@@ -1,12 +1,14 @@
+/* eslint-disable import/extensions */
 import { LitElement, html, css } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { TRANSLATION_URL } from './const.js';
+import './components/reading-speed';
+import './components/language-picker';
+import './components/word-viewer';
 
 @customElement('languish-app')
 export class LanguishApp extends LitElement {
-  @property()
-  title = 'Langu-ish';
-
   static styles = css`
     :host {
       min-height: 100vh;
@@ -156,33 +158,37 @@ export class LanguishApp extends LitElement {
     return html`
       <main>
         <div class="row">
-          <div class="col">
-            <h1 class="title">${this.title}</h1>
-            <p>The world's worst way to learn a language.</p>
-            <div id="spritz-source-lang" class="spritz-reader">
-              T<span class="highlight-text">h</span>ey
+          <div class="col col-left">
+            <div>
+              <h1 class="title">Langu<span class="em">ish</span></h1>
+              <p class="subtitle">The world's worst way to learn a language.</p>
             </div>
-            <div id="spritz-target-lang" class="spritz-reader">
-              El<span class="highlight-text">l</span>os
-              ${this._translation == null
-                ? html`<small class="placeholder-text">
-                    ${this._isLoading
-                      ? 'Translation is loading...'
-                      : 'Translated text will appear here.'}
-                  </small>`
-                : html`<span lang=${this._targetLang}
-                    >${this._translation}</span
-                  >`}
+            <div
+              id="spritz-source-lang"
+              class="spritz-reader invert-brightness control"
+            >
+              <word-viewer
+                words="${ifDefined(
+                  this._text === null ? undefined : this._text
+                )}"
+              ></word-viewer>
             </div>
-            <div class="row">
-              <div class="speed">250 wpm</div>
-              <div class="language">
-                <select @change=${this._handleLangChange}>
-                  <option value="fr">French</option>
-                  <option value="es">Spanish</option>
-                  <option value="de">German</option>
-                  <option value="sr">Serbian</option>
-                </select>
+            <div
+              id="spritz-target-lang"
+              class="spritz-reader invert-brightness control"
+            >
+              <word-viewer
+                words="${ifDefined(
+                  this._translation === null ? undefined : this._translation
+                )}"
+              ></word-viewer>
+            </div>
+            <div class="row control control-row">
+              <div class="speed col invert-brightness">
+                <reading-speed></reading-speed>
+              </div>
+              <div class="language col invert-brightness">
+                <language-picker .value=${this._targetLang}></language-picker>
               </div>
             </div>
           </div>
@@ -193,6 +199,10 @@ export class LanguishApp extends LitElement {
               placeholder="Paste your text here"
             ></textarea>
           </div>
+        </div>
+
+        <div>
+          <language-picker .value=${this._sourceLang}></language-picker>
         </div>
 
         <button
@@ -214,30 +224,13 @@ export class LanguishApp extends LitElement {
     `;
   }
 
-  @state()
-  private _translation: string | null = null;
-
-  @state()
-  private _targetLang: string = 'fr';
-
-  @state()
-  private _text: string = '';
-
-  @state()
-  private _isLoading: boolean = false;
-
   private _handleInput(e: Event) {
     const text = (e.target as HTMLInputElement).value ?? '';
     this._text = text;
   }
 
-  private _handleLangChange(e: Event) {
-    const text = (e.target as HTMLInputElement).value ?? '';
-    this._targetLang = text;
-  }
-
   private _computeCanTranslate(): boolean {
-    return !!this._text.length;
+    return !!this._text.length && this._sourceLang !== this._targetLang;
   }
 
   private _computeCanSpeak(): boolean {
@@ -260,7 +253,7 @@ export class LanguishApp extends LitElement {
         method: 'post',
         body: JSON.stringify({
           text: this._text,
-          sourceLang: 'en',
+          sourceLang: this._sourceLang,
           targetLang: this._targetLang,
         }),
       });
