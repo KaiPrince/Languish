@@ -14,13 +14,8 @@ export class LanguishApp extends LitElement {
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      font-size: calc(10px + 2vmin);
-      color: #1a2b42;
-      /* max-width: 960px; */
-      width: 100%;
       margin: 0 auto;
       text-align: center;
-      background-color: var(--languish-app-background-color);
       font-family: 'Comic Sans MS';
     }
 
@@ -30,6 +25,7 @@ export class LanguishApp extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 5rem;
     }
 
     .app-footer {
@@ -41,12 +37,78 @@ export class LanguishApp extends LitElement {
       margin-left: 5px;
     }
 
-    .translation-row {
+    .col {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .col-left {
+      gap: 0.7rem;
+      align-items: center;
+    }
+
+    .row {
       display: flex;
       flex-direction: row;
-      gap: 30px;
-      border: 2px solid white;
-      border-radius: 5px;
+      width: 100%;
+      justify-content: space-around;
+    }
+
+    .speed {
+      flex: 4;
+      justify-content: center;
+    }
+
+    .language {
+      flex: 8;
+    }
+
+    .placeholder-text {
+      color: grey;
+    }
+
+    .title {
+      font-size: 5rem;
+      margin: unset;
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      margin-block-start: 0.5em;
+    }
+
+    .text-input {
+      padding-top: 0.5rem;
+    }
+
+    .spritz-reader {
+      height: 2em;
+      /* font-size: 3rem; */
+    }
+
+    .control {
+      width: 80%;
+    }
+
+    .control-row {
+      gap: 0.5rem;
+    }
+
+    .em {
+      font-style: italic;
+    }
+
+    .invert-brightness {
+      color: black;
+      background-color: white;
+      border: 4px solid orange;
+      border-radius: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100%;
     }
 
     .col {
@@ -74,6 +136,21 @@ export class LanguishApp extends LitElement {
       color: grey;
     }
   `;
+
+  @state()
+  private _translation: string | null = null;
+
+  @state()
+  private _targetLang: string = 'fr';
+
+  @state()
+  private _sourceLang: string = 'en';
+
+  @state()
+  private _text: string = '';
+
+  @state()
+  private _isLoading: boolean = false;
 
   render() {
     return html`
@@ -109,10 +186,9 @@ export class LanguishApp extends LitElement {
               </div>
             </div>
           </div>
-          <div class="col">
+          <div class="col text-input">
             <textarea
-              cols="30"
-              rows="10"
+              class="invert-brightness"
               @input=${this._handleInput}
               placeholder="Paste your text here"
             ></textarea>
