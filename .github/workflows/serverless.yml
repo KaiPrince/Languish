@@ -22,10 +22,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - name: serverless deploy
-        uses: serverless/github-action@v3
-        with:
-          args: -c "cd ./functions/translate && serverless deploy"
-          entrypoint: /bin/sh
+      - name: Serverless Deploy
+        run: npx serverless deploy
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
