@@ -13,6 +13,8 @@ export default class WordViewer extends LitElement {
 
     pre {
       padding: 0.2em;
+      margin: unset;
+      font-family: unset;
     }
 
     .highlight {

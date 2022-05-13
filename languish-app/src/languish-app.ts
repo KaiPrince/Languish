@@ -86,7 +86,7 @@ export class LanguishApp extends LitElement {
 
     .spritz-reader {
       height: 2em;
-      /* font-size: 3rem; */
+      font-size: 2rem;
     }
 
     .control {
@@ -167,21 +167,29 @@ export class LanguishApp extends LitElement {
               id="spritz-source-lang"
               class="spritz-reader invert-brightness control"
             >
-              <word-viewer
-                words="${ifDefined(
-                  this._text === null ? undefined : this._text
-                )}"
-              ></word-viewer>
+              ${this._computeCanSpeak()
+                ? html`<word-viewer
+                    words="${ifDefined(
+                      this._text === null ? undefined : this._text
+                    )}"
+                  ></word-viewer>`
+                : html`<span class="placeholder-text">
+                    Translation will appear here
+                  </span>`}
             </div>
             <div
               id="spritz-target-lang"
               class="spritz-reader invert-brightness control"
             >
-              <word-viewer
-                words="${ifDefined(
-                  this._translation === null ? undefined : this._translation
-                )}"
-              ></word-viewer>
+              ${this._computeCanSpeak()
+                ? html`<word-viewer
+                    words="${ifDefined(
+                      this._translation === null ? undefined : this._translation
+                    )}"
+                  ></word-viewer>`
+                : html`<span class="placeholder-text">
+                    Translation will appear here
+                  </span>`}
             </div>
             <div class="row control control-row">
               <div class="speed col invert-brightness">
@@ -209,7 +217,7 @@ export class LanguishApp extends LitElement {
           @click=${this._translate}
           ?disabled=${!this._computeCanTranslate()}
         >
-          Translate
+          ${this._isLoading ? 'Loading...' : 'Translate'}
         </button>
 
         <button @click=${this._speak} ?disabled=${!this._computeCanSpeak()}>
