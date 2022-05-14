@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 @customElement('language-picker')
 export default class LanguagePicker extends LitElement {
   @property()
-  value: string = 'fr';
+  value: string = 'en';
 
   static styles = css`
     :host {
