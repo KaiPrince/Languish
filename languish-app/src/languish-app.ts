@@ -196,7 +196,10 @@ export class LanguishApp extends LitElement {
                 <reading-speed></reading-speed>
               </div>
               <div class="language col invert-brightness">
-                <language-picker .value=${this._targetLang}></language-picker>
+                <language-picker
+                  value=${this._targetLang}
+                  @onChange=${this._updateTargetLang}
+                ></language-picker>
               </div>
             </div>
           </div>
@@ -210,7 +213,10 @@ export class LanguishApp extends LitElement {
         </div>
 
         <div>
-          <language-picker .value=${this._sourceLang}></language-picker>
+          <language-picker
+            value=${this._sourceLang}
+            @onChange=${this._updateSourceLang}
+          ></language-picker>
         </div>
 
         <button
@@ -235,6 +241,14 @@ export class LanguishApp extends LitElement {
   private _handleInput(e: Event) {
     const text = (e.target as HTMLInputElement).value ?? '';
     this._text = text;
+  }
+
+  private _updateSourceLang(e: CustomEvent) {
+    this._sourceLang = e.detail.value;
+  }
+
+  private _updateTargetLang(e: CustomEvent) {
+    this._targetLang = e.detail.value;
   }
 
   private _computeCanTranslate(): boolean {

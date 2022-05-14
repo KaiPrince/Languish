@@ -39,5 +39,13 @@ export default class LanguagePicker extends LitElement {
   private _handleLangChange(e: Event) {
     const text = (e.target as HTMLInputElement).value ?? '';
     this.value = text;
+    this.dispatchEvent(
+      new CustomEvent('onChange', {
+        detail: {
+          value: text,
+        },
+        composed: true,
+      })
+    );
   }
 }
