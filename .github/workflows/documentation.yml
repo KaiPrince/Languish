@@ -22,7 +22,7 @@ jobs:
       # Run our action to document our code
       - uses: KaiPrince/AngelDocs@v0.1
         with:
-          files: languish-app
+          files: languish-app/src
           folder: dist
           base-url: Languish
           project-name: Languish
