@@ -23,7 +23,7 @@ jobs:
       - uses: KaiPrince/AngelDocs@v0.1
         with:
           files: src
-          folder: dist
+          folder: languish-app
           base-url: Languish
           project-name: Languish
 
