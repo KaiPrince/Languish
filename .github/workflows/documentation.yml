@@ -22,8 +22,8 @@ jobs:
       # Run our action to document our code
       - uses: KaiPrince/AngelDocs@v0.1
         with:
-          files: src
-          folder: languish-app
+          files: languish-app
+          folder: dist
           base-url: Languish
           project-name: Languish
 
