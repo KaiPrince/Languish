@@ -154,6 +154,9 @@ export class LanguishApp extends LitElement {
   @state()
   private _isLoading: boolean = false;
 
+  @state()
+  private _isPlaying: boolean = false;
+
   render() {
     return html`
       <main>
@@ -172,6 +175,7 @@ export class LanguishApp extends LitElement {
                     words="${ifDefined(
                       this._text === null ? undefined : this._text
                     )}"
+                    ?play=${this._isPlaying}
                   ></word-viewer>`
                 : html`<span class="placeholder-text">
                     Translation will appear here
@@ -186,6 +190,7 @@ export class LanguishApp extends LitElement {
                     words="${ifDefined(
                       this._translation === null ? undefined : this._translation
                     )}"
+                    ?play=${this._isPlaying}
                   ></word-viewer>`
                 : html`<span class="placeholder-text">
                     Translation will appear here
@@ -291,6 +296,8 @@ export class LanguishApp extends LitElement {
       return;
     }
 
+    this._isPlaying = true;
+
     const text = this._translation;
     if (
       'speechSynthesis' in window &&
@@ -301,6 +308,12 @@ export class LanguishApp extends LitElement {
       const msg = new SpeechSynthesisUtterance(text);
       msg.lang = this._targetLang;
       msg.rate = 0.5;
+      msg.onend = () => {
+        this._isPlaying = false;
+      };
+      msg.onboundary = () => {
+        this.dispatchEvent(new CustomEvent('nextWord'));
+      };
       window.speechSynthesis.speak(msg);
     } else {
       // Speech Synthesis not supported
