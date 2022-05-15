@@ -14,13 +14,7 @@ async function translateWordForWord(client, text, sourceLang, targetLang) {
   const translatedWords = await Promise.all(
     String(text)
       .split(" ")
-      .map((word) =>
-        client.translate({
-          word,
-          sourceLang,
-          targetLang,
-        })
-      )
+      .map((word) => client.translate(word, sourceLang, targetLang))
   );
 
   const translatedText = translatedWords.join(" ");
