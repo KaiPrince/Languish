@@ -99,6 +99,7 @@ export class LanguishApp extends LitElement {
 
     .em {
       font-family: 'Curlz MT';
+      font-size: 1.1em;
     }
 
     .invert-brightness {
