@@ -15,7 +15,7 @@ provider:
           Resource:
             - "*"
   environment:
-    - GOOGLE_APPLICATION_CREDENTIALS: ${env:GOOGLE_APPLICATION_CREDENTIALS}
+    GOOGLE_APPLICATION_CREDENTIALS: ${env:GOOGLE_APPLICATION_CREDENTIALS}
 
 functions:
   translateWordForWord:
