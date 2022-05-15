@@ -237,7 +237,7 @@ export class LanguishApp extends LitElement {
         </button>
 
         <button @click=${this._speak} ?disabled=${!this._computeCanSpeak()}>
-          Speak
+          ${!this._isPlaying ? 'Play' : 'Stop'}
         </button>
       </main>
 
@@ -301,29 +301,7 @@ export class LanguishApp extends LitElement {
       return;
     }
 
-    this._isPlaying = true;
-
-    const text = this._translation;
-    if (
-      'speechSynthesis' in window &&
-      window.speechSynthesis.getVoices().length
-    ) {
-      // Speech Synthesis supported
-
-      const msg = new SpeechSynthesisUtterance(text);
-      msg.lang = this._targetLang;
-      msg.rate = 0.5;
-      msg.onend = () => {
-        this._isPlaying = false;
-      };
-      msg.onboundary = () => {
-        this.dispatchEvent(new CustomEvent('nextWord'));
-      };
-      window.speechSynthesis.speak(msg);
-    } else {
-      // Speech Synthesis not supported
-      this._translation = "Sorry, your browser doesn't support text to speech!";
-    }
+    this._isPlaying = !this._isPlaying;
   }
 }
 
