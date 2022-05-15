@@ -30,4 +30,4 @@ async function translate(text, sourceLang, targetLang) {
   return translatedText;
 }
 
-export { translate };
+module.exports = { translate };
