@@ -1,0 +1,1 @@
+import{o as n,c as s,a}from"./app.d7d0a0d8.js";const t='{"title":"","description":"","frontmatter":{},"relativePath":"projects/Languish/languish-app/src/languish-app.md","lastUpdated":1652578592184}',p={},o=a('',2);p.render=function(a,t,p,e,c,u){return n(),s("div",null,[o])};export default p;export{t as __pageData};
