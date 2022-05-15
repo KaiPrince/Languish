@@ -1,11 +1,12 @@
+/* eslint-disable wc/guard-super-call */
 /* eslint-disable import/extensions */
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import { TRANSLATION_URL } from './const.js';
 import './components/reading-speed';
 import './components/language-picker';
 import './components/word-viewer';
+import debounce from './utils/debounce.js';
 
 @customElement('languish-app')
 export class LanguishApp extends LitElement {
@@ -85,7 +86,6 @@ export class LanguishApp extends LitElement {
     }
 
     .spritz-reader {
-      height: 2em;
       font-size: 2rem;
     }
 
@@ -141,10 +141,10 @@ export class LanguishApp extends LitElement {
   `;
 
   @state()
-  private _translation: string | null = 'Ellos voluntad pasta sus texto aquí';
+  private _translation: string = 'Ellos voluntad pasta sus texto aquí';
 
   @state()
-  private _targetLang: string = 'fr';
+  private _targetLang: string = 'es';
 
   @state()
   private _sourceLang: string = 'en';
@@ -169,38 +169,39 @@ export class LanguishApp extends LitElement {
             </div>
             <div
               id="spritz-source-lang"
-              class="spritz-reader invert-brightness control"
+              class="spritz-reader invert-brightness control col"
             >
-              ${this._computeCanSpeak()
-                ? html`<word-viewer
-                    words="${ifDefined(
-                      this._text === null ? undefined : this._text
-                    )}"
-                    ?play=${this._isPlaying}
-                  ></word-viewer>`
-                : html`<span class="placeholder-text">
-                    Translation will appear here
-                  </span>`}
+              <word-viewer
+                words=${this._text}
+                ?play=${this._isPlaying}
+              ></word-viewer>
+
+              <div class="row">
+                <button
+                  @click=${this._speak}
+                  ?disabled=${!this._computeCanSpeak()}
+                >
+                  ${!this._isPlaying ? 'Play' : 'Stop'}
+                </button>
+              </div>
             </div>
             <div
               id="spritz-target-lang"
               class="spritz-reader invert-brightness control"
             >
-              ${this._computeCanSpeak()
-                ? html`<word-viewer
-                    words="${ifDefined(
-                      this._translation === null ? undefined : this._translation
-                    )}"
-                    ?play=${this._isPlaying}
-                  ></word-viewer>`
-                : html`<span class="placeholder-text">
-                    Translation will appear here
-                  </span>`}
+              <word-viewer
+                words=${this._translation}
+                ?play=${this._isPlaying}
+              ></word-viewer>
             </div>
             <div class="row control control-row">
-              <div class="speed col invert-brightness">
-                <reading-speed></reading-speed>
+              <div class="language col invert-brightness">
+                <language-picker
+                  value=${this._sourceLang}
+                  @onChange=${this._updateSourceLang}
+                ></language-picker>
               </div>
+              <span>-></span>
               <div class="language col invert-brightness">
                 <language-picker
                   value=${this._targetLang}
@@ -223,24 +224,6 @@ export class LanguishApp extends LitElement {
             ></textarea>
           </div>
         </div>
-
-        <div>
-          <language-picker
-            value=${this._sourceLang}
-            @onChange=${this._updateSourceLang}
-          ></language-picker>
-        </div>
-
-        <button
-          @click=${this._translate}
-          ?disabled=${!this._computeCanTranslate()}
-        >
-          ${this._isLoading ? 'Loading...' : 'Translate'}
-        </button>
-
-        <button @click=${this._speak} ?disabled=${!this._computeCanSpeak()}>
-          ${!this._isPlaying ? 'Play' : 'Stop'}
-        </button>
       </main>
 
       <p class="app-footer">
@@ -253,6 +236,8 @@ export class LanguishApp extends LitElement {
   private _handleInput(e: Event) {
     const text = (e.target as HTMLInputElement).value ?? '';
     this._text = text;
+
+    this._debouncedTranslate();
   }
 
   private _updateSourceLang(e: CustomEvent) {
@@ -270,6 +255,8 @@ export class LanguishApp extends LitElement {
   private _computeCanSpeak(): boolean {
     return !!this._translation?.length;
   }
+
+  private _debouncedTranslate = debounce(() => this._translate(), 500);
 
   private async _translate(): Promise<void> {
     if (!this._computeCanTranslate()) {
@@ -293,6 +280,8 @@ export class LanguishApp extends LitElement {
       });
       const json = await res.json();
       this._translation = json.result;
+    } catch (e) {
+      this._translation = 'Translation failed.';
     } finally {
       this._isLoading = false;
     }
