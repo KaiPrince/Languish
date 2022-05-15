@@ -1,9 +1,12 @@
 "use strict";
 const { translateWordForWord } = require("./translate");
+const googleDriver = require("./drivers/google");
 
 // The maximum number of characters you can submit in a single Translate request.
 // This truncates the input, so only the first MAX_LENGTH characters will be translated.
 const MAX_LENGTH = 5000;
+
+const translationServiceClient = googleDriver;
 
 module.exports.translateWordForWord = async (event) => {
   const json = JSON.parse(event?.body ?? "{}");
@@ -21,6 +24,7 @@ module.exports.translateWordForWord = async (event) => {
   }
 
   const result = await translateWordForWord(
+    translationServiceClient,
     text.substring(0, MAX_LENGTH),
     sourceLang,
     targetLang
