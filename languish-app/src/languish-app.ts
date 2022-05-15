@@ -141,7 +141,7 @@ export class LanguishApp extends LitElement {
   `;
 
   @state()
-  private _translation: string | null = null;
+  private _translation: string | null = 'Ellos voluntad pasta sus texto aquí';
 
   @state()
   private _targetLang: string = 'fr';
@@ -150,7 +150,7 @@ export class LanguishApp extends LitElement {
   private _sourceLang: string = 'en';
 
   @state()
-  private _text: string = '';
+  private _text: string = 'They will paste their text here';
 
   @state()
   private _isLoading: boolean = false;
@@ -213,12 +213,13 @@ export class LanguishApp extends LitElement {
             <textarea
               class="invert-brightness"
               @input=${this._handleInput}
-              placeholder="Paste your text here"
+              placeholder="They will paste their text here"
             ></textarea>
             <textarea
               class="invert-brightness"
               .value=${this._translation ?? ''}
-              placeholder="Translation will appear here."
+              placeholder="Translation will appear here"
+              readonly
             ></textarea>
           </div>
         </div>
