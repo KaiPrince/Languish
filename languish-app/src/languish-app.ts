@@ -209,6 +209,11 @@ export class LanguishApp extends LitElement {
               @input=${this._handleInput}
               placeholder="Paste your text here"
             ></textarea>
+            <textarea
+              class="invert-brightness"
+              .value=${this._translation ?? ''}
+              placeholder="Translation will appear here."
+            ></textarea>
           </div>
         </div>
 
