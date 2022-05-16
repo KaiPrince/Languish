@@ -138,6 +138,11 @@ export class LanguishApp extends LitElement {
     .placeholder-text {
       color: grey;
     }
+
+    .bottom-text {
+      color: black;
+      text-align: start;
+    }
   `;
 
   @state()
@@ -166,6 +171,9 @@ export class LanguishApp extends LitElement {
             <div>
               <h1 class="title">Langu<span class="em">ish</span></h1>
               <p class="subtitle">The world's worst way to learn a language.</p>
+              <p>
+                <a href="./pages/about.html">What is Languish?</a>
+              </p>
             </div>
             <div
               id="spritz-source-lang"
@@ -208,6 +216,11 @@ export class LanguishApp extends LitElement {
                   @onChange=${this._updateTargetLang}
                 ></language-picker>
               </div>
+            </div>
+            <div class="bottom-text">
+              <p>Read words one-by-one</p>
+              <p>Hear the translation as you read</p>
+              <p>Click the view translation icons for the spelling</p>
             </div>
           </div>
           <div class="col text-input">
