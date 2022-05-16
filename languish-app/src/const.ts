@@ -1,4 +1,4 @@
 const TRANSLATION_URL =
-  'https://wik42wkvzpkrpoxt4bbgsndw6i0qsfqo.lambda-url.us-east-1.on.aws';
+  'https://us-central1-languish-349816.cloudfunctions.net/other-translate-dev-first';
 
 export { TRANSLATION_URL };

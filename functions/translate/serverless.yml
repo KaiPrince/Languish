@@ -15,8 +15,6 @@ provider:
             - "comprehend:DetectDominantLanguage"
           Resource:
             - "*"
-  environment:
-    GOOGLE_APPLICATION_CREDENTIALS: creds.json
 
 functions:
   translateWordForWord:
