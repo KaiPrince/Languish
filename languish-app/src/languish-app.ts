@@ -172,7 +172,7 @@ export class LanguishApp extends LitElement {
               <h1 class="title">Langu<span class="em">ish</span></h1>
               <p class="subtitle">The world's worst way to learn a language.</p>
               <p>
-                <a href="./pages/about.html">What is Languish?</a>
+                <a href="./about.html">What is Languish?</a>
               </p>
             </div>
             <div
